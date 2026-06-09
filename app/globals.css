@@ -78,3 +78,20 @@ html {
 .fade-up {
   animation: fade-up 0.7s ease both;
 }
+
+/* Chat-Typing-Dots — sanftes Pulsieren, kein vertikales Springen */
+@keyframes typing-dot {
+  0%,
+  60%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.85);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.typing-dot {
+  animation: typing-dot 1.2s ease-in-out infinite;
+}

@@ -13,21 +13,20 @@ export const OPENING = {
 export const MIN_LEAD_HOURS = 2;
 export const MAX_ADVANCE_DAYS = 60;
 
-// Mitarbeiter:innen — Foto-URLs später durch echte Salon-Fotos ersetzen.
+// Mitarbeiter:innen — Foto-URLs durch echte Salon-Fotos ersetzen
+// (in /public/team/ ablegen und Pfad eintragen, z.B. "/team/graziella.jpg").
 export const EMPLOYEES = [
   {
     id: "graziella",
     name: "Graziella",
     role: "Inhaberin · Master-Stylistin",
-    photo:
-      "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=600&q=80",
+    photo: "/team/graziella.jpg",
   },
   {
-    id: "sandra",
-    name: "Sandra",
+    id: "aurelia",
+    name: "Aurelia",
     role: "Stylistin · Colorations-Expertin",
-    photo:
-      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=600&q=80",
+    photo: "/team/aurelia.jpg",
   },
 ] as const;
 

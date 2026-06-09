@@ -17,7 +17,7 @@ const services = [
   {
     title: "Strähnen",
     body: "Highlights setzen, natürliche Grundfarbe behalten. Harmonisch, vielseitig und auf Ihren Typ zugeschnitten.",
-    img: "https://images.unsplash.com/photo-1519415943484-9fa1873496d4?auto=format&fit=crop&w=900&q=80",
+    img: "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=900&q=80",
   },
   {
     title: "Keratinglättung",
@@ -381,17 +381,17 @@ function Unique() {
     <section className="relative overflow-hidden bg-cream py-24 sm:py-32">
       <div className="mx-auto grid max-w-7xl items-center gap-14 px-5 sm:px-8 lg:grid-cols-12">
         <div className="lg:col-span-5">
-          <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] shadow-xl ring-1 ring-cream-dark">
-            <Image
-              src="https://images.unsplash.com/photo-1532710093739-9470acff878f?auto=format&fit=crop&w=1200&q=80"
-              alt="Salon Atmosphäre"
-              fill
-              sizes="(min-width: 1024px) 40vw, 100vw"
-              className="object-cover"
-            />
-          </div>
-          <div className="absolute hidden lg:block lg:-mt-20 lg:ml-[28%]">
-            <div className="rounded-2xl bg-white p-5 shadow-lg ring-1 ring-cream-dark">
+          <div className="relative">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] shadow-xl ring-1 ring-cream-dark">
+              <Image
+                src="https://images.unsplash.com/photo-1532710093739-9470acff878f?auto=format&fit=crop&w=1200&q=80"
+                alt="Salon Atmosphäre"
+                fill
+                sizes="(min-width: 1024px) 40vw, 100vw"
+                className="object-cover"
+              />
+            </div>
+            <div className="absolute -bottom-6 right-4 hidden rounded-2xl bg-white p-5 shadow-lg ring-1 ring-cream-dark lg:block">
               <div className="font-display text-3xl text-ink">★ ★ ★ ★ ★</div>
               <div className="mt-1 text-sm text-ink-soft">
                 Bewertet von unseren Kundinnen
