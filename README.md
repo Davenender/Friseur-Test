@@ -109,3 +109,4 @@ lib/
   giftcard-mail.ts               Gutschein-Mail-Versand (idempotent)
   calendar.ts                    Google Calendar Stub
 ```
+# AgentsGilt
