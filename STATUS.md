@@ -1,257 +1,181 @@
-# Projekt-Übergabe & Gesamtkontext — David
-
-> Diese Datei fasst ALLES zusammen: das Geschäftsmodell (CLS-Kurs), den Tech-Stack,
-> was bisher gebaut wurde, den Vapi-Voice-Agent, und die nächsten Schritte.
-> Gedacht zum Weitergeben an einen frischen Claude-Chat (Browser oder Code).
+# VOLLSTÄNDIGE PROJEKT-ÜBERGABE — David / Agents Gilt
+(Stand: Juni 2026 — alle Details aus dem bisherigen Chat)
 
 ---
 
-## 1. WER & ZIEL
+## 0. WER ICH BIN & ARBEITSWEISE
 
-- David, blutiger Anfänger, hat „gestern" (Anfang Juni 2026) mit dem Ganzen angefangen.
-- Lernt anhand des Kurses **„CLS — Von 0€ zu wiederkehrenden Umsätzen mit Claude"**.
-- Ziel: Eine **1-Personen-KI-Agentur** aufbauen, die lokalen Geschäften (KMU)
-  KI-Lösungen baut und verkauft — einmaliger Setup-Preis + monatlicher Retainer.
-- Markenname (selbst gewählt, passt zur Domain): **Agents Gilt** (Domain: agents-gilt.agency)
-- Arbeitsstil: will Terminal-Befehle (npm install, npm run dev) am liebsten selbst tippen;
-  Claude darf Dateien/Code direkt schreiben + `.env.local` bearbeiten.
-
----
-
-## 2. DAS GESCHÄFTSMODELL (aus CLS-Kurs)
-
-**In einem Satz:** Mit Claude in Stunden bauen, wofür Agenturen Wochen brauchen
-(Websites, Chatbots, AI-Agenten, Automatisierungen, interne Tools, SaaS), und an
-lokale Unternehmen/KMU verkaufen — einmalig für den Bau + monatliche Betreuung.
-
-### Die 4 Einkommensstufen
-| Stufe | Was | Preis | Aufwand |
-|---|---|---|---|
-| 1 Quick Wins | Landingpage, einfacher Chatbot, kleine Automation | 300–1.500 € einmalig | Stunden–Tage |
-| 2 Produktisierte Services | CRM-Setup, Voice-Agent, Terminbuchung | 1.500–5.000 € + Retainer | Tage |
-| 3 Custom Systeme | Kundenportal, RAG-Agent, internes Tool | 5.000–20.000 € + Retainer | 1–4 Wochen |
-| 4 SaaS / Consulting | Eigenes Produkt, AI-Strategie | wiederkehrend / Tagessatz | laufend |
-
-### Kursstruktur (13 Module)
-- Modul 1–4: Fundament (Was ist Claude, Tech-Stack, Setup, Claude wie ein Senior Engineer steuern)
-- Modul 5–7: Werkzeugkiste (200+ Prompts, Bauanleitungen für AI-Produkte, 50+ verkaufsfertige Angebote)
-- Modul 8–10: Verkaufen (Kunden finden, ansprechen, closen)
-- Modul 11–12: Betrieb (was man vom Kunden braucht, SOPs/Standardabläufe)
-- Modul 13: 90-Tage-Plan bis zum ersten Kunden
-
-### Wichtigste Kurs-Prinzipien (Modul 4 — Claude steuern)
-- **Erst Plan, dann Code.** Immer Claude zuerst den Plan schreiben lassen, prüfen, dann bauen.
-- Prompt-Struktur: ROLLE / ZIEL / KONTEXT / CONSTRAINTS / OUTPUT / QUALITÄT.
-- Große Aufgaben in kleine Schritte zerlegen, nach jedem Schritt testen.
-- Immer Kontext liefern (Ziel + Constraints + Zustand).
-- Keys in `.env`, niemals committen.
-- „Frag nach, bevor du rätst" in jeden großen Prompt.
-- CLAUDE.md pro Projekt anlegen (Stack, Konventionen, Befehle).
-
-### 90-Tage-Fahrplan (wo David steht)
-- Woche 1: Setup & Grundlagen (GitHub, Git, VS Code, Claude Code, Supabase, Vercel) — ✅ erledigt
-- Woche 2: Erste Demo-Landingpage bauen & deployen — ✅ (Friseur-Test war die Übung)
-- Woche 3: RAG-Chatbot als Flaggschiff — ✅ (Chatbot Lia gebaut, allerdings ohne Vektor-DB, simpler System-Prompt-Ansatz)
-- Woche 4: Nische & Angebot definieren — OFFEN (wichtigster nächster Schritt)
-- Woche 5–8: Leads recherchieren, Outreach, erster Kunde — OFFEN
-- Woche 9–12: Liefern, Referenz, Retainer, skalieren — OFFEN
+- **David Hesse**, geb. 28.12.2007 (18, volljährig). Wohnt Lämmerspieler Straße 100, 63165 Mühlheim am Main.
+- Blutiger Anfänger, hat Anfang Juni 2026 angefangen. Lernt nach Kurs **„CLS — Von 0€ zu wiederkehrenden Umsätzen mit Claude"**.
+- Baut **1-Personen-KI-Agentur „Agents Gilt"** (Domain: agents-gilt.agency). Verkauft KI-Lösungen an lokale Unternehmen (Setup-Preis + monatlicher Retainer).
+- **Arbeitsweise-Regeln:**
+  - Terminal-Befehle (npm install, npm run dev) tippt David SELBST.
+  - Claude darf Code/Dateien/.env.local direkt schreiben.
+  - Immer ERST Plan zeigen + Fragen stellen, DANN bauen.
+  - Einfache Schritt-für-Schritt-Erklärungen (Anfänger).
+  - Claude soll David vor Tool-Sammelei bewahren (nur holen was ein Projekt konkret braucht — David neigt dazu, Accounts/Keys auf Vorrat anzulegen).
+  - Keys NIE im Chat posten (David macht das oft → bei Live-Keys gefährlich, rotieren wenn geleakt).
 
 ---
 
-## 3. DER KOMPLETTE TECH-STACK (CLS Modul 2)
+## 1. DAS GESCHÄFTSMODELL (CLS-Kurs)
 
-### Tools die David WIRKLICH braucht (Kern)
-- **Claude Code** (Terminal) — Haupt-Bauwerkzeug
-- **GitHub** — Code speichern (Repo: Davenender/Friseur-Test)
-- **Vercel** — Hosting + Deployment (1 Klick von GitHub)
-- **Stripe** — Zahlungen (aktuell Test-Mode)
-- **Resend** — transaktionale E-Mails (Domain agents-gilt.agency verifiziert ✅)
-- **Anthropic API** — Claude in eigene Produkte einbauen (Chatbot läuft darüber)
-- **Supabase** — DB + Auth + Vektor-DB (pgvector) für spätere Projekte (Konto da, noch nicht angebunden)
-- **Vapi** — Voice-Agents (Telefon-KI)
+**In einem Satz:** Mit Claude in Stunden bauen, wofür Agenturen Wochen brauchen (Websites, Chatbots, AI-Agenten, Automatisierungen, interne Tools, SaaS), an lokale KMU verkaufen — einmalig Bau + monatliche Betreuung.
 
-### Tools die später/projektspezifisch kommen
-- Cal.com (Terminbuchungs-Komponente), Make/n8n/Zapier (Automatisierungen),
-  Twilio (Telefonie für Voice), Apify (Lead-Scraping aus öffentlichen Quellen),
-  Pinecone/Weaviate (Vektor-DB-Alternativen — aber Supabase pgvector reicht meist),
-  Cloudflare (DNS), ElevenLabs/Deepgram (Voice-Bausteine).
+**4 Einkommensstufen:** 1) Quick Wins (Landingpage/Chatbot) 300–1.500€. 2) Produktisiert (CRM/Voice/Buchung) 1.500–5.000€ + Retainer. 3) Custom (Portal/RAG) 5.000–20.000€ + Retainer. 4) SaaS/Consulting wiederkehrend/Tagessatz.
 
-### Tools die NICHT gebraucht werden (Doppelungen)
-- Netlify (Vercel reicht), Namecheap (Domain läuft über Vercel/Namecheap eh schon),
-  Firebase (Supabase reicht), LangChain (direktes SDK besser), Airtable (Supabase reicht),
-  OpenAI (Anthropic reicht), Railway/Docker (erst bei 24/7-Workern), PostHog (erst bei echten Nutzern).
+**13 Module:** 1–4 Fundament · 5–7 Werkzeugkiste (200+ Prompts, Bauanleitungen, 50+ Angebote) · 8–10 Verkaufen · 11–12 Betrieb/SOPs · 13 90-Tage-Plan.
 
-### Wichtigste Grundbegriffe (Modul 1)
-- **AI-Agent**: kann handeln (Tools nutzen: Kalender, DB, Mail), nicht nur antworten.
-- **MCP** (Model Context Protocol): „USB für KI" — Claude an externe Systeme anstöpseln.
-- **API**: Schnittstelle, über die zwei Programme reden. Braucht meist einen API-Key.
-- **Webhook**: ein Dienst ruft DICH an wenn etwas passiert (Rückgrat von Automatisierungen).
-- **RAG** (Retrieval Augmented Generation): KI antwortet anhand DEINER Dokumente (Chunks → Embeddings → Vektor-DB → relevante Stücke an Claude). Herzstück der meisten Agenten.
+**Prinzipien (Modul 4):** Erst Plan dann Code · ROLLE/ZIEL/KONTEXT/CONSTRAINTS/OUTPUT/QUALITÄT · große Aufgaben zerlegen · Keys in .env, nie committen · „Frag nach bevor du rätst" · CLAUDE.md pro Projekt.
+
+**90-Tage-Stand:** Woche 1 Setup ✅ · Woche 2 Demo-Landingpage ✅ (Friseur) · Woche 3 Chatbot ✅ · Woche 4+ (Nische/Angebot/Akquise) OFFEN.
+
+**Kurs liegt als PDF:** /Users/david/Downloads/pdf24_umgewandelt.pdf (36MB, 372 Seiten).
 
 ---
 
-## 4. WAS BISHER GEBAUT WURDE
+## 2. PROJEKT 1: FRISEUR-WEBSITE (Übungs-Demo)
 
-### Projekt: Friseur-Website „Haarstudio Graziella"
-Pfad: `/Users/david/Desktop/Friseur-Test`
-Echtes Vorbild: haarstudio-graziella.de (Friseursalon in Mühlheim am Main / Lämmerspiel).
-David war im echten Salon — die Inhaberinnen heißen **Graziella** (Inhaberin) und
-**Aurelia** (Stylistin/Coloration). Echte Team-Fotos sind eingebaut (`public/team/`).
+**Pfad:** /Users/david/Desktop/Friseur-Test · **GitHub:** Davenender/Friseur-Test · läuft lokal (npm run dev → localhost:3000), Build+Lint grün, NOCH NICHT auf Vercel deployed.
 
-**Stack:** Next.js 16 (App Router) · React 19 · Tailwind v4 · TypeScript · Resend · Stripe · Anthropic.
+**Vorbild:** haarstudio-graziella.de — echter Salon „Haarstudio Graziella", Mühlheim/Lämmerspiel. David war dort. Inhaberin **Graziella Faro-Lombardi** (seit 2012), 2. Stylistin **Aurelia** (Coloration). Echte Team-Fotos in public/team/ (graziella.jpg, aurelia.jpg).
 
-**Salon-Daten:**
-- Adresse: Friedrich-Ebert-Str. 8, 63165 Mühlheim am Main (Lämmerspiel)
-- Telefon: 06108 / 79 98 65 · Mail: kontakt@haarstudio-graziella.de
-- Öffnungszeiten: Mo–Fr 09:00–18:30, Sa 08:30–14:00, So zu
-- Leistungen (ungefähre Preise): Schnitt ab 35€/45min, Coloration ab 65€/90min,
-  Strähnen ab 85€/2h, Keratinglättung ab 180€/3h (hält 5 Monate), Beratung kostenlos 30min
+**Salon-Daten:** Friedrich-Ebert-Str. 8, 63165 Mühlheim am Main · Tel 06108/799865 · kontakt@haarstudio-graziella.de · Mo–Fr 09:00–18:30, Sa 08:30–14:00, So zu.
 
-**Was die Website kann:**
-- Single-Page-Landingpage (Hero, About, Team, Leistungen, Galerie, Rezensionen, Buchung, Gutschein, Kontakt mit Google-Maps)
-- **Online-Terminbuchung**: Leistung → Mitarbeiterin (Graziella/Aurelia/egal) → Datum → Slot → Daten.
-  Kostenlose Beratung = direkt gebucht; bezahlte Services = Stripe-Anzahlung (10–50€, wird angerechnet).
-- **Stripe-Gutscheine**: 25/50/75/100€ oder frei. Werden via Stripe Coupon+Promotion-Code angelegt,
-  beim Buchen einlösbar. **Restguthaben-Logik**: bei Teil-Einlösung wird Code automatisch
-  durch neuen Code mit Restbetrag ersetzt (Rollover). War ein wichtiger Bugfix.
-- **Mails via Resend**: Bestätigung an Kund:in + Benachrichtigung an Salon, mit .ics-Kalenderanhang.
-- **Chatbot „Lia"** (siehe unten).
+**Leistungen (Preis/Dauer/Anzahlung):** Schnitt ab 35€/45min/10€ · Coloration ab 65€/90min/20€ · Strähnen ab 85€/120min/25€ · Keratinglättung ab 180€/180min/50€ · Kostenlose Beratung 30min/0€.
 
-**Wichtige Dateien:**
-- `app/page.tsx` — Landingpage
-- `app/api/booking/route.ts` — Buchung (frei → direkt, bezahlt → Stripe)
-- `app/api/checkout/route.ts` — Gutschein-Kauf
-- `app/api/stripe/webhook/route.ts` — Stripe Webhook
-- `app/api/chat/route.ts` + `app/api/chat-lead/route.ts` — Chatbot Backend
-- `components/BookingForm.tsx`, `components/GiftCardForm.tsx`, `components/ChatWidget.tsx`
-- `lib/booking.ts` (Services, Mitarbeiter, Slots), `lib/chatbot-knowledge.ts`,
-  `lib/giftcard-mail.ts`, `lib/giftcard-refund.ts`, `lib/mail.ts`, `lib/calendar.ts` (Google Cal, DEAKTIVIERT)
+**Tech-Stack:** Next.js 16 (App Router, Turbopack), React 19, Tailwind v4, TypeScript, Resend, Stripe, @anthropic-ai/sdk, react-day-picker, date-fns, zod, react-hook-form.
 
-**Status:** läuft lokal (`npm run dev` → localhost:3000), Build+Lint grün, auf GitHub gepusht.
-NOCH NICHT live auf Vercel deployed.
+### Features & Dateien
+- **Landingpage** (app/page.tsx): Header, Hero (Stats, Review-Card), Marquee, About, **Team** (Graziella+Aurelia), Services (4 Foto-Karten), Unique, Gallery, **Reviews** (als „Google Rezensionen" gebrandet, Testimonials Julia/Renate/Nicole), Booking, GiftCard, Contact (Google-Maps-iframe + „Route planen"), Footer.
+- **Buchung** (components/BookingForm.tsx, app/api/booking + availability): 5 Schritte Service→Mitarbeiterin(Graziella/Aurelia/egal)→Datum(DayPicker, So+Vergangenheit gesperrt)→Slot→Daten. Kostenlos=direkt gebucht, bezahlt=Stripe-Anzahlung. 2 Mails (Kundin-Bestätigung + Salon-Notification) mit .ics-Anhang.
+- **Slots** (lib/booking.ts): aus Öffnungszeiten generiert, 45-min, 2h Vorlauf, max 60 Tage.
+- **Stripe-Gutscheine** (components/GiftCardForm.tsx, app/api/checkout, lib/giftcard-mail.ts): Presets 25/50/75/100€ o. frei. Nach Zahlung: Voucher-Mail mit Code (Webhook ODER /gutschein/erfolg, idempotent). Gutschein erzeugt Stripe-Coupon + Promotion-Code → bei Buchung einlösbar (allow_promotion_codes:true).
+- **Restguthaben-Rollover** (lib/giftcard-refund.ts): bei Teil-Einlösung wird alter Promo-Code deaktiviert + neuer Coupon mit Restbetrag (gleicher Code) erstellt + Mail. WICHTIGE BUGS GEFIXT: Stripe-Expand max 4 Ebenen (war 5); Coupon liegt unter discount.source.coupon (nicht discount.coupon).
+- **Chatbot „Lia"** (components/ChatWidget.tsx, app/api/chat + chat-lead, lib/chatbot-knowledge.ts): Floating-Button unten rechts, Attention-Bubble nach 10s (dismissbar, sessionStorage), Chat-Panel (Desktop 400×640, Mobile Vollbild). Persona Lia, warm, duzt, Streaming (SSE, claude-sonnet-4-5). Beantwortet Salon-Fragen, lotst zu #termin, sammelt E-Mail-Lead wenn unsicher ([LEAD_REQUEST]-Marker → Inline-Form → 2 Mails). Preise nur „ab ca.", bleibt strikt beim Salon-Thema.
+- **Mail** (lib/mail.ts): Resend-Wrapper, degradet sauber ohne Key (skip + Warning), loggt Erfolg/Fehler.
+- **Stripe** (lib/stripe.ts), **ICS** (lib/ics.ts), **Voucher** (lib/voucher.ts).
+- **Google Calendar** (lib/calendar.ts): gebaut, aber DEAKTIVIERT. Slots gelten alle als frei, keine Einträge. Service-Account JSON (Projekt haarstudio-graziella, haarstudio-booking@haarstudio-graziella.iam.gserviceaccount.com) war eingerichtet, ist in .env.local auskommentiert. Reaktivierbar.
 
-### Chatbot „Lia" (auf der Website)
-- Floating-Widget unten rechts, Persona „Lia", warm/freundlich, duzt.
-- Beantwortet Fragen zu Salon (aus `lib/chatbot-knowledge.ts`), lotst zur Buchung,
-  sammelt E-Mail-Lead wenn sie was nicht weiß ([LEAD_REQUEST]-Marker → Lead-Form → Mail an David).
-- Läuft über Anthropic-API (Streaming). Preise nur als „ab ca."-Range. Bleibt strikt beim Salon-Thema.
-- Funktioniert getestet (Preis-Frage, Öffnungszeiten, Off-Topic-Rücklenkung, Lead-Capture).
-
-### Google Calendar
-- Integration ist vorbereitet (`lib/calendar.ts`) aber DEAKTIVIERT — Slots gelten aktuell alle als frei,
-  keine echten Einträge. Service-Account-JSON existierte mal (Projekt haarstudio-graziella), ist
-  aber in .env.local auskommentiert. Kann reaktiviert werden wenn nötig.
+### Erledigte Design-Fixes
+Strähnen-Bild (zeigte Schuhe → echtes Foto), Sterne-Karte Position (verdeckte Text → an Bildecke), Chat-Dots (Bounce → sanftes Pulsieren).
 
 ---
 
-## 5. VAPI — VOICE-AGENT (Telefon-KI)
+## 3. VOICE-AGENT (Vapi)
 
-### Was Vapi ist
-Plattform die alle 5 Voice-Komponenten bündelt: Telefonie + Speech-to-Text + LLM + Text-to-Speech + Tool-Calls.
-Man konfiguriert einen Agenten (System-Prompt + Voice + Tools), kein eigenes Audio-Engineering nötig.
-Region für David: **Irland (EU)** wegen DSGVO + Latenz.
+**Wie es funktioniert:** Telefonie (Twilio) → STT (Deepgram) → LLM (Claude) → TTS (ElevenLabs) → Tools. Plattform Vapi bündelt alles. Region: **Irland (EU)** wegen DSGVO+Latenz. Salon installiert NICHTS — nur Rufumleitung (besetzt/keine Antwort → Twilio-Nr), Termin landet in Google Calendar.
 
-### Zwei Voice-Agenten gebaut/geplant
+**A) „Lia – Haarstudio Graziella" (INBOUND):**
+- Assistant ID: **954d6f47-5e2a-4421-bb8f-1ab6c75d86ed**
+- claude-haiku-4-5, Deepgram nova-3 (DE), Voice Vapi „Elliot"
+- Tools (nur Schemas, KEIN Backend → eskaliert korrekt): getFreeSlots, createBooking, sendSmsConfirmation, transferToHuman (→ +496108799865)
+- Erster Testanruf: $0.28 für 2:41min, 30k Prompt-Tokens (zu lang) → Prompt gekürzt, {{date}} für Datumslogik eingebaut
+- US-Testnummer provisioniert: +1 640 214 9755 (zum Testen aus DE Auslandsgespräch → besser Web-Call im Vapi-Dashboard)
 
-**A) „Lia – Haarstudio Graziella" (INBOUND, Salon)**
-- Assistant ID: `954d6f47-5e2a-4421-bb8f-1ab6c75d86ed`
-- Nimmt verpasste Salon-Anrufe entgegen (Rufumleitung bei besetzt/keine Antwort),
-  beantwortet FAQs, soll Termine in Google Calendar buchen, SMS-Bestätigung, Eskalation an Salon.
-- Test-Anruf lief erfolgreich. Tools (getFreeSlots, createBooking, sendSmsConfirmation) sind
-  nur Schemas OHNE echtes Backend → Lia eskaliert korrekt wenn sie nicht buchen kann.
-- Erster Test: 0,28 $ für 2:41 min. Prompt war zu lang (30k Tokens) → wurde gekürzt.
-- Modell: claude-haiku-4-5, Voice: Vapi Elliot/Deepgram nova-3 (deutsch).
-- Kürzerer optimierter System-Prompt existiert (mit {{date}} für Datumslogik).
+**B) „Lia Sales" (OUTBOUND Akquise):**
+- Konzept: ruft lokale Geschäfte an, stellt sich SOFORT als KI vor (=Demo des Produkts), matcht Branche→Produkt, erfasst Lead.
+- Wissensbasis: **vapi/lia-sales-knowledge.md** (alle 52 Produkte aus Kurs, Branchen-Empfehlungen, Einwand-Bibliothek, Marke „Agents Gilt", „unser Team")
+- Tools: saveLead (→ Webhook zu Make/Google Sheet), endCall
+- Kompakter Verhaltens-Prompt getrennt von Wissensdatei (Token sparen)
 
-**B) „Lia Sales" (OUTBOUND, Akquise)**
-- Idee: ruft lokale Geschäfte an, stellt sich als KI vor (= ist gleichzeitig Demo des Produkts),
-  matched Branche/Pain-Point auf passendes Produkt aus dem Portfolio, erfasst Lead (Name, Tel, Mail,
-  bevorzugter Kanal), David meldet sich dann.
-- Wissensbasis als Datei: `vapi/lia-sales-knowledge.md` (alle 52 Produkte aus dem Kurs,
-  Branchen-Empfehlungen, Einwand-Bibliothek). Marke „Agents Gilt", Selbstreferenz „unser Team".
-- Kompakter Verhaltens-Prompt getrennt von Wissensdatei (Token sparen).
-- Tools nötig: saveLead (→ Webhook zu Make/Sheet), endCall.
+**Twilio-Nummer = SACKGASSE für jetzt:** Deutsche +49-Nummern brauchen Regulatory Bundle (Bundesnetzagentur, 1–3 Tage Prüfung). Ortsnummern (z.B. +49 89) nur „Business", nicht Privatperson. Mobile/National kaum verfügbar. → Echte Nummer erst nach Gewerbe holen. Web-Call zum Testen.
 
-### Kostenstruktur Vapi (real gemessen)
-- ~0,07–0,10 $/Min gesamt. Bei 100 Anrufen × 2,5 min ≈ 25 $/Monat reale Kosten.
-- Verkauf als Retainer 300–600 €/Monat → Marge >90%.
-- WICHTIG: Spending Limit in Vapi setzen (z.B. 5 $) während Testphase.
+**Kosten Vapi:** ~0,07–0,10$/Min. 100 Anrufe/Monat ≈ 25$ real → Verkauf 300–600€/Monat Retainer = >90% Marge. Spending-Limit setzen.
 
-### Wie Voice im echten Einsatz läuft (Salon installiert NICHTS)
-- Salon richtet nur **Rufumleitung** ein (bei besetzt/keine Antwort → Twilio-Nummer).
-- Twilio nimmt Anruf → streamt an Vapi → Vapi (STT+LLM+TTS) → ruft Tools auf Davids Vercel-Server →
-  Termin landet in Google Calendar, SMS-Bestätigung. Salon sieht nur: Termin im Kalender.
-- Alte Salon-Nummer bleibt, kein App/Hardware-Setup beim Salon.
-
-### Twilio-Nummer = SACKGASSE für jetzt (wichtige Erkenntnis)
-- Deutsche +49-Nummern brauchen ein **Regulatory Bundle** (Bundesnetzagentur-Pflicht, 1–3 Tage Prüfung).
-- Deutsche ORTSnummern (z.B. +49 89 München) gibt's NUR als „Business", NICHT als Privatperson.
-- Als Privatperson ginge nur Mobile/National — kaum verfügbar, trotzdem Bundle-Pflicht.
-- FAZIT: Twilio-Nummer erst holen wenn Gewerbe angemeldet ist + echter Bedarf.
-- Zum TESTEN reicht der **Web-Call im Vapi-Dashboard** (Browser + Mikro, gratis, keine Nummer nötig).
+**Rechtlich Cold-Call (§7 UWG):** Privatpersonen NIE. B2B nur bei mutmaßlichem Interesse. KI-Transparenz sofort. Sperrliste bei Ablehnung. Vor echter Akquise Anwalt fragen.
 
 ---
 
-## 6. RECHTLICHES & GESCHÄFTLICHES (besprochen)
+## 4. GESCHÄFTLICHES / RECHTLICHES
 
 ### Gewerbe
-- Vor dem ersten Verkauf: Gewerbe anmelden (~20–40€, 15 min beim Gewerbeamt).
-- **Kleinunternehmerregelung § 19 UStG** wählen (Umsatz Jahr 1 < 22.000€): keine USt ausweisen,
-  auf Rechnung „Gemäß § 19 UStG wird keine Umsatzsteuer berechnet".
-- Steuer kommt erst nächstes Jahr über Einkommensteuererklärung — bei wenig Einkommen oft 0€
-  (Grundfreibetrag ~12.084€). Erste 800€-Rechnung behält man komplett.
+- Angemeldet über gewerbeanmeldung-sofort.de, **80€ bezahlt** (überteuert — direkt beim Amt 20–40€), in Bearbeitung/Versand.
+- **Tätigkeit:** „Entwicklung und Vermarktung von KI-gestützten Softwarelösungen, insbesondere Chatbots, AI-Agenten und Prozessautomatisierungen für Unternehmen." (top formuliert, deckt alles ab)
+- Einzelunternehmer, **Kleinunternehmer §19 UStG**.
+- WARTET AUF: Gewerbeschein (Post) → dann Finanzamt-Fragebogen (oder proaktiv via ELSTER) → Steuernummer → DANN Rechnungen erlaubt.
+- WARNUNG: Nach Gewerbeanmeldung kommen Fake-Briefe (Gewerbeauskunft-Zentrale etc.) die amtlich aussehen + Geld fordern → ignorieren/wegwerfen.
 
-### Verträge (für Kunden)
-1. **Dienstleistungsvertrag**: Leistung, Setup-Preis + Retainer, Mindestlaufzeit 6 Monate,
-   Kündigung 30 Tage, Drittkosten (Twilio/Vapi) im Retainer enthalten, Haftung begrenzt.
-2. **AVV (Auftragsverarbeitungsvertrag, Art. 28 DSGVO)** — PFLICHT weil personenbezogene Daten
-   (Namen, Telefonnummern, Anrufe) im Kundenauftrag verarbeitet werden. Sub-Unternehmer nennen
-   (Twilio, Vapi, Anthropic, Google). Vorlagen: IHK, existenzgruender.de, oder Anwalt ~150–300€.
-- Tools: PDF + DocuSign Free-Trial reicht für erste Verträge.
+### Steuern
+- Kleinunternehmer: keine USt ausweisen, „Gemäß §19 UStG keine USt" auf Rechnung. Behält erste Rechnung komplett. Steuer erst nächstes Jahr (Einkommensteuer), bei wenig Einkommen oft 0€ (Grundfreibetrag ~12.084€). 30% beiseitelegen. EÜR (einfache Tabelle). Belege 10 Jahre.
 
-### Cold-Call-Recht (WICHTIG für „Lia Sales")
-- Cold Calls in DE streng reguliert (§ 7 UWG). Privatpersonen NIEMALS ohne Einwilligung.
-- B2B nur bei „mutmaßlichem Interesse". Sofort-Transparenz dass es KI ist. Sperrliste bei Ablehnung.
-- VOR echten Akquise-Anrufen: Anwalt-Konsultation (~150€) empfohlen. Bis dahin nur Demo/Eigentests.
+### Verträge (in business/ als .docx UND .md)
+- **1_Dienstleistungsvertrag.docx** — Setup+Retainer, Mindestlaufzeit 6 Mon, Kündigung 30 Tage, Haftung begrenzt (KI-Fehler!), §19 UStG
+- **2_AVV_Auftragsverarbeitung.docx** — DSGVO Art.28, Sub-Prozessoren (Anthropic/Vapi/Twilio/Stripe/Resend/Supabase/Google/Vercel), TOM, Löschfristen
+- **3_Rechnungsvorlage.docx** — Kleinunternehmer-konform, fortlaufende Nr.
+- Ein Basis-Vertrag reicht für ALLE Produkte: §1 (was) + §4/§5 (einmalig vs. Setup+Retainer) anpassen. AVV nur wenn Personendaten verarbeitet (Chatbot/Voice/Portal ja; reine Info-Landingpage nein).
+- WICHTIG: vom Anwalt prüfen lassen (~150–250€), dann für alle Kunden wiederverwendbar.
+
+### Zahlung (Stripe)
+- Setup = One-time-Produkt, Retainer = Recurring-Abo (monatlich). Kunde gibt 1× Zahlungsdaten → Stripe zieht automatisch ein.
+- Kunde kann technisch stoppen (SEPA 8-Wochen-Rückbuchung, Karten-Chargeback) ABER Vertrag (Mindestlaufzeit) sichert rechtlich ab. Stripe macht KEIN Inkasso (Kurs-Typ lag falsch). → Vertrag IMMER nötig, nicht nur Zahlungslink.
+- Ablauf: erst Vertrag (DocuSign-Signatur) → dann Stripe-Zahlungslink → per E-Mail.
+- E-Signatur-Tool: **DocuSign** (empfohlen, eIDAS, bekannt) / PandaDoc / Yousign.
+
+### Anwalt (anwalt.de)
+- Suche „IT-Recht" (Ort leer = bundesweit, beraten online).
+- **Favoritin: Anne Sulmann (ITjur, Düsseldorf)** — Bewertung beschreibt EXAKT Davids Fall: „IT-Rahmenvertrag und AVV für IT-Einzelunternehmer mit modularen Leistungsscheinen". 5,0/50, Fachanwältin IT-Recht + Datenschutz.
+- 2. Wahl: Christian Kramarz (Darmstadt, 26km, macht explizit Vertragsprüfung).
+- Personalisierte Nachricht geschrieben (Bezug auf Bewertung, Festpreis erfragen, 3 Dokumente). David schreibt 2–3 an, vergleicht Festpreise.
+- Stelle Fragen zu: Haftung (KI-Fehler), AVV-DSGVO mit US-Diensten, Widerrufsbelehrung, Einmal- vs. Retainer-Variante.
 
 ---
 
-## 7. ACCOUNTS & KEYS (Werte im Passwort-Manager / .env.local, NICHT hier)
+## 5. MARKE & INFRASTRUKTUR
 
-David hat Accounts/Keys bei: Anthropic, Resend, Stripe (test), Supabase, Vercel, Airtable,
-Pinecone, Cloudflare, Apify, Make, Vapi, Twilio (Trial), Google Cloud (Service Account).
-Alle Secret-Keys sind passwortgeschützt in Notizen + teils in `.env.local` (gitignored).
-Resend-Domain agents-gilt.agency ist verifiziert (Mails gehen an beliebige Empfänger).
-HINWEIS: David neigt dazu Keys im Chat zu posten — bei Live-Keys vermeiden, rotieren wenn geleakt.
+### Branding
+- Name **„Agents Gilt"** (David behält es; Alternativen wie „Lia Digital" wurden diskutiert).
+- **Logo:** Wortmarke „AGENTS GILT" + Gold-Diamant-Icon (gewählt über Roboter-Version). Transparent via remove.bg, Diamant-Icon separat als Favicon.
+
+### Domain & E-Mail
+- **Domain agents-gilt.agency:** Registrar **Namecheap**, DNS verwaltet bei **Vercel** (Projekt „agents", Vercel-Account Hobby).
+- Die „Produkt X kaufen 29,99€"-Seite auf der Domain = harmloses Test-Deployment (Platzhalter).
+- **Google Workspace** eingerichtet, Geschäfts-Mail: **kontakt@agents-gilt.agency** (~6€/Monat).
+- DNS-Einträge bei Vercel hinzugefügt: Google-TXT (Domain-Bestätigung) + MX (smtp.google.com, Priorität 1). Resend-Einträge (auf send.-Subdomain) NICHT gelöscht.
+- E-Mail-Signatur in Gmail eingerichtet (Logo + Name + kontakt@ + Tel + agents-gilt.agency).
+- Gmail als Mac-App via Chrome-Verknüpfung („In eigenem Fenster öffnen").
+
+### Telefon/WhatsApp (für später)
+- WhatsApp Business braucht echte Prepaid-SIM (~5€, z.B. Aldi Talk). Twilio-Nummern funktionieren dafür meist NICHT. Erst wenn erster Kunde.
+
+### Impressum
+- Pflicht sobald Geschäfts-Website live (Name, Adresse, Mail, oft Tel). Generator: e-recht24.de. → eigene Mail/Nr. sinnvoll (wird öffentlich).
+
+---
+
+## 6. ACCOUNTS & KEYS (Werte im Passwort-Manager, NICHT hier)
+Anthropic (sk-ant-api03-…) · Resend (re_… , Domain agents-gilt.agency verifiziert → Mails an alle Empfänger) · Stripe TEST (pk_test_51TfpYk… / sk_test_51TfpYk…) · Vapi · Vercel (vck_…) · Supabase (Projekt ggixjusdavjfphlvwntg — wird wegen Inaktivität pausiert, EGAL weil ungenutzt, NICHT auf Pro upgraden) · Twilio (Trial) · Airtable · Pinecone · Cloudflare · Apify · Make · Google Workspace.
+Stripe-Testkarte: 4242 4242 4242 4242, beliebiges Zukunftsdatum, bel. CVC.
+
+---
+
+## 7. TOOLS-EINORDNUNG (was wofür, was BRAUCHT David)
+**Kern (nutzt David):** Claude Code, GitHub, Vercel, Stripe, Resend, Anthropic API, Vapi.
+**Bald/projektspezifisch:** Supabase (DB/Auth/pgvector), Cal.com, Make/n8n, Twilio, Apify, ElevenLabs/Deepgram.
+**NICHT nötig (Doppelungen):** Netlify (Vercel reicht), Firebase (Supabase), LangChain (direktes SDK), Airtable (Supabase), OpenAI (Anthropic), Railway/Docker (erst bei 24/7-Workern), PostHog (erst bei Nutzern), Pinecone/Weaviate (Supabase pgvector reicht), Cloudflare (erst bei DNS-Automation).
+**Grundbegriffe:** AI-Agent=handelt mit Tools · MCP=USB für KI · API=Schnittstelle+Key · Webhook=Dienst ruft dich · RAG=KI antwortet aus deinen Docs (Chunks→Embeddings→Vektor-DB).
 
 ---
 
 ## 8. NÄCHSTE SCHRITTE (offen)
-
-Kurzfristig:
-1. **Nische & Angebot festlegen** (Modul 4 des Plans) — z.B. „Online-Buchung + KI-Telefon für Friseure/Praxen in Davids Region". EINE Nische zum Start.
-2. **Friseur-Website live deployen** auf Vercel → echte URL zum Vorzeigen.
-3. **Lia Sales** im Vapi fertig: kurzer Prompt + Wissensdatei hochladen + saveLead-Tool (Webhook → Google Sheet via Make).
-
-Mittelfristig:
-4. Gewerbe anmelden (Kleinunternehmer).
-5. Mit dem echten Salon Graziella sprechen: „Wie viele Anrufe verpasst ihr? Wäre euch eine KI 300€/Monat wert?" → wenn ja, Voice-Agent echt anbinden (Google Calendar Tools + Twilio-Nummer nach Gewerbe).
-6. Erste Lead-Liste (Apify/Google Maps, nur öffentliche Firmendaten, DSGVO-konform) + Outreach.
-7. Vertragsvorlagen vom Anwalt prüfen lassen.
-
-Voice-Agent technisch fertigstellen (wenn echter Kunde):
-- 3 API-Routen in Friseur-Projekt bauen: /api/voice/free-slots, /api/voice/create-booking, /api/voice/send-sms (nutzen bestehende Booking-Logik wieder)
-- In Vapi als Tool-URLs eintragen
-- Google Calendar reaktivieren (lib/calendar.ts)
-- Deutsche Twilio-Nummer (nach Gewerbe, „Business"-Bundle)
+1. Anwaltsprüfung der Verträge abwarten (Anne Sulmann / Christian Kramarz anschreiben, Festpreise vergleichen)
+2. Steuernummer abwarten (Gewerbeschein → ELSTER-Fragebogen → Kleinunternehmer ankreuzen)
+3. Friseur-Website auf Vercel live deployen
+4. Nische & Angebot finalisieren (EINE Nische, z.B. Buchung+KI-Telefon für Friseure/Praxen)
+5. Mit echtem Salon Graziella über Voice-Agent sprechen („Wie viele Anrufe verpasst ihr? 300€/Monat wert?")
+6. Voice-Agent technisch fertig: 3 API-Routen (/api/voice/free-slots, create-booking, send-sms) in Friseur-Projekt, in Vapi als Tool-URLs, Google Calendar reaktivieren, deutsche Twilio-Nummer (nach Gewerbe, Business-Bundle)
+7. Erste Lead-Liste (Apify/Google Maps, nur öffentliche Firmendaten, DSGVO) + Outreach
+8. WhatsApp Business (Prepaid-SIM) wenn Kunden kommen
 
 ---
 
-## 9. ARBEITSWEISE-NOTIZEN (wie David mit Claude arbeiten will)
+## 9. WORKFLOW / ZWEI-CHAT-SYSTEM
+- **Claude.ai Browser → Projekt „Agents Gilt"** (Projects-Funktion): Kurs-PDF + diese Zusammenfassung als Projekt-Wissen hochladen → jeder Chat dort kennt alles. Für Strategie/Business/allgemeine Fragen. (Browser-Claude kann KEINE Mac-Dateien lesen.)
+- **Claude Code (Coding-Bereich):** für echtes Bauen pro Projekt. Zusammenfassung rein + „lies STATUS.md/HANDOFF.md". Kann Dateien lesen.
 
-- Terminal-Befehle (npm install, npm run dev): David tippt selbst.
-- Datei-Edits, Code, .env.local: Claude macht direkt.
-- Immer erst Plan zeigen, Fragen stellen, dann bauen (Modul-4-Prinzip).
-- David ist Anfänger — Erklärungen einfach halten, Schritt für Schritt, nichts voraussetzen.
-- Claude soll David vor Tool-Sammelei/Rabbit-Holes bewahren (er neigt dazu, Tools/Accounts
-  anzulegen die er nicht braucht). Nur holen was ein konkretes Projekt braucht.
+## TERMINAL-SPICKZETTEL (auch in HANDOFF.md)
+Start: `cd /Users/david/Desktop/Friseur-Test && npm run dev` (stop: Ctrl+C)
+Speichern: `git add . && git commit -m "..." && git push`
+Anderer PC: `git clone https://github.com/Davenender/Friseur-Test.git` → `npm install` → `.env.local` neu (Keys aus Passwort-Manager) → `npm run dev`
+Neues Projekt verbinden: Ordner+leeres GitHub-Repo selbst erstellen, dann: `git init` → `git add .` → `git commit -m "..."` → `git branch -M main` → `git remote add origin <URL>` → `git push -u origin main`
+Vercel/andere Apps = optional, nur wenn Projekt sie braucht. Desktop=arbeiten, GitHub=Backup, Vercel=live.

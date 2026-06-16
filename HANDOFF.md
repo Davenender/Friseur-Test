@@ -88,3 +88,12 @@ git push -u origin main
 - `vapi/` = Wissensbasis für Voice-Agent "Lia Sales"
 - `.env.local` = alle Keys (NICHT auf GitHub)
 - `STATUS.md` + `HANDOFF.md` = Übergabe-Dokumente
+
+## WICHTIGE FAKTEN (Stand zuletzt)
+- Geschäfts-E-Mail: kontakt@agents-gilt.agency (Google Workspace)
+- Domain: agents-gilt.agency (Registrar: Namecheap, DNS: Vercel)
+- GitHub: Davenender/Friseur-Test
+- Marke: Agents Gilt · Logo: Wortmarke "AGENTS GILT" + Gold-Diamant
+- Gewerbe angemeldet (Kleinunternehmer §19 UStG), warte auf Gewerbeschein + Steuernummer
+- Verträge in business/ → Anwaltsprüfung läuft (Favoritin: Anne Sulmann / ITjur)
+- Vapi Voice-Agent "Lia" Inbound: 954d6f47-5e2a-4421-bb8f-1ab6c75d86ed

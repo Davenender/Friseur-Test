@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "agentsgilt",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": ["-c", "cd /Users/david/Desktop/AgentsGilt && npm run dev -- -p 3000"],
+      "port": 3000
+    }
+  ]
+}
