@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# einzelne HTML-Datei aus scripts/build-standalone.mjs
+/dist/
+/.standalone-build/

@@ -84,12 +84,29 @@ lib/bio/
   cases.ts                       Gene und Fälle
   lab.ts                         Zielprüfung, Guide-Bewertung
   colors.ts                      Farbschema der vier Basen
-scripts/validate-bio.ts          Prüft Leseraster, Proteine und Erreichbarkeit der Zielstellen
+standalone/                      Einstiegspunkt und Stile für den Einzeldatei-Build
+scripts/
+  validate-bio.ts                Prüft Leseraster, Proteine und Erreichbarkeit der Zielstellen
+  build-standalone.mjs           Bündelt die App in eine einzelne HTML-Datei
 ```
 
 Die 3D-Ansicht ist direkt mit three.js gebaut, ohne Wrapper-Bibliothek. Alle
 Meshes werden einmal angelegt und danach nur noch bewegt und umgefärbt – beim
 Blättern durch die Sequenz entsteht keine Geometrie-Neuberechnung.
+
+## Einzelne HTML-Datei
+
+```bash
+npm run build:standalone   # dist/base-editing-labor.html
+```
+
+Bündelt die komplette App in eine Datei von rund 870 kB – React, three.js und
+alle Fälle inbegriffen. Sie läuft in jedem Browser per Doppelklick: ohne Server,
+ohne Installation, ohne Netzverbindung. Praktisch zum Weitergeben oder zum
+Öffnen auf einem Tablet.
+
+Statt der Schriften aus `next/font` benutzt dieser Build die Systemschriften,
+damit die Datei nichts nachladen muss.
 
 ## Prüfen
 

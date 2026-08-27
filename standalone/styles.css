@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+/*
+ * Im Next.js-Build liefert next/font die Schriften. Im Einzeldatei-Build
+ * werden bewusst die Systemschriften benutzt: Sie sind sofort da, sehen auf
+ * dem iPad gut aus und die Datei bleibt ohne Netzabhängigkeit lauffähig.
+ */
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "SFMono-Regular", Menlo, monospace;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: #020617;
+  color: #f1f5f9;
+  overscroll-behavior: none;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  -webkit-touch-callout: none;
+}
