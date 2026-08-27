@@ -326,7 +326,7 @@ export function ToolPanel({
                   })
                 }
                 className="mt-1 min-h-11 w-full rounded-xl border border-slate-700 bg-slate-950 px-3 font-mono text-base tracking-[0.3em] text-emerald-300 outline-none focus:border-emerald-400"
-                placeholder="TTT"
+                placeholder="CTT"
               />
               <p className="mt-1 text-[10px] text-slate-500">
                 Wird vor der ausgewählten Position eingefügt. Nicht durch drei teilbar? Dann verschiebt

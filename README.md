@@ -1,133 +1,81 @@
-# Haarstudio Graziella – Landingpage
+# Base-Editing-Labor
 
-Moderne Single-Page-Website für Haarstudio Graziella (Mühlheim am Main) mit
-**Online-Terminbuchung** und **Gutschein-Verkauf via Stripe**.
+Interaktive Biologie-App zum **gezielten Austausch eines einzelnen Basenpaares**
+in der DNA. An einer dreidimensionalen Doppelhelix lassen sich Punktmutationen
+setzen und zurücknehmen: Krankheiten heilen, Krankheiten auslösen, gesunde
+Menschen verändern – und dabei sehen, wo die Methode an ihre Grenzen stößt.
 
-**Stack:** Next.js 16 (App Router) · React 19 · Tailwind v4 · Resend · Stripe · react-day-picker.
-
-## Features
-
-- 🎨 Helles, modernes Design (Cream/Karamell/Rosé)
-- 📅 Buchungs-Wizard mit Datum + Zeit-Picker, Live-Verfügbarkeit
-- 📧 Doppel-Mail bei Buchung: Bestätigung an Kund:in + Benachrichtigung an Salon (mit **.ics**-Anhang für Kalender-Import)
-- 💳 Gutschein-Shop mit Stripe Checkout, Voucher-Mail mit Code, Erfolgsseite
-- 🛡 Webhook-Verifikation (mit Fallback auf Success-Page für lokales Testen)
-- 🗺 Google-Maps-Einbettung, Sticky Header, Galerie
-
-## Setup
+Ausgelegt auf Bedienung per Touch, insbesondere auf dem iPad.
 
 ```bash
 npm install
-cp .env.example .env.local   # Werte eintragen
-npm run dev
+npm run dev        # http://localhost:3000
 ```
 
-Öffnen: <http://localhost:3000>
+## Bedienung
 
-## Environment Variables
-
-| Variable | Beschreibung |
+| Geste | Wirkung |
 | --- | --- |
-| `RESEND_API_KEY` | API-Key aus [Resend](https://resend.com) |
-| `MAIL_FROM` | z. B. `"Haarstudio Graziella <noreply@deine-domain.de>"` – Domain muss bei Resend verifiziert sein (oder `onboarding@resend.dev` für Tests) |
-| `MAIL_TO` | Empfänger für Benachrichtigungen (`Davidhes4a@gmail.com`) |
-| `STRIPE_SECRET_KEY` | Stripe Secret (sk_test_…/sk_live_…) |
-| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe Publishable Key |
-| `STRIPE_WEBHOOK_SECRET` | Optional in Dev. **Pflicht in Production.** |
-| `NEXT_PUBLIC_SITE_URL` | Basis-URL für Stripe-Redirects |
-| `GOOGLE_CALENDAR_ID` / `GOOGLE_SERVICE_ACCOUNT_JSON` | Optional – siehe unten |
+| Ein Finger ziehen | Helix drehen |
+| Zwei Finger zusammen/auseinander | Zoomen |
+| Zwei Finger hoch/runter | An der Sequenz entlangfahren |
+| Auf ein Basenpaar tippen | Als Ziel auswählen |
 
-## Stripe Webhook (Production)
+## Was die App kann
 
-In Dev funktioniert der Gutschein-Versand auch ohne Webhook, weil die
-Erfolgsseite (`/gutschein/erfolg`) den Versand als Fallback triggert.
+**3D-Doppelhelix** mit Zucker-Phosphat-Rückgrat, Basenpaaren in korrekter
+Größenrelation (Purin/Pyrimidin) und Wasserstoffbrücken. Der Cas9-Komplex mit
+Desaminase und Guide-RNA fährt an die Zielstelle und klappt die Helix lokal auf
+(R-Schleife). Die Schaltfläche „Zellteilung" zeigt die semikonservative
+Replikation: Die Helix trennt sich in zwei Tochterhelices aus je einem alten und
+einem neu wachsenden Strang – so wird der Edit vererbt.
 
-Für Production unbedingt einen Webhook anlegen:
+**Werkzeuge** mit ihren echten Beschränkungen:
 
-1. Stripe Dashboard → **Developers → Webhooks → Add endpoint**
-2. URL: `https://deine-domain.de/api/stripe/webhook`
-3. Event: `checkout.session.completed`
-4. Signing Secret kopieren → `STRIPE_WEBHOOK_SECRET` in den Vercel-Settings hinterlegen.
+| Werkzeug | Umwandlung | Doppelstrangbruch |
+| --- | --- | --- |
+| CBE (BE4max) | C•G → T•A | nein |
+| ABE (ABE8e) | A•T → G•C | nein |
+| CGBE | C•G → G•C | nein |
+| AYBE | A•T → C•G | nein |
+| Prime-Editor | beliebig, auch Insertion und Deletion | nein |
+| Cas9-Nuklease | zufällige Indels | ja |
 
-Lokal testen mit der Stripe CLI:
+Dazu die Cas9-Varianten NGG, NG und SpRY: Manche Zielstellen sind erst mit
+gelockertem PAM erreichbar – zum Preis geringerer Effizienz und mehr
+Off-Target-Aktivität. Base-Editoren arbeiten in einem Fenster von
+Protospacer-Position 4 bis 8, mit positions- und sequenzabhängigen Effizienzen,
+Bystander-Edits an Nachbarbasen und gelegentlichen Off-Targets.
 
-```bash
-stripe listen --forward-to localhost:3000/api/stripe/webhook
-# zeigt einen whsec_… an → in .env.local eintragen → npm run dev neu starten
-```
+**Auswertung** vom Genotyp über das Protein bis zum Krankheitsbild: stumme,
+Missense-, Nonsense- und Rasterschubmutationen, Spleißstellen, regulatorische
+Positionen und Varianten unklarer Signifikanz.
 
-## Google Calendar (optional)
+## Die Fälle
 
-Die App funktioniert ohne Google-Integration: Slots werden aus den
-Öffnungszeiten generiert, jede Buchung verschickt ein .ics an
-`MAIL_TO` → 1 Klick = im Kalender.
+| Fall | Gen | Aufgabe |
+| --- | --- | --- |
+| Sichelzellanämie | HBB | p.Glu6Val über den Gegenstrang zu Hb G-Makassar umschreiben |
+| β-Thalassämie | HBB | Stoppcodon β39 zurückschreiben |
+| Wie eine Krankheit entsteht | HBB | Mit dem CBE genau diese Mutation erzeugen |
+| Mukoviszidose W1282X | CFTR | Stoppcodon TGA wieder zu TGG machen |
+| ΔF508 | CFTR | Zeigt, warum Base-Editing hier scheitert – Prime-Editing muss ran |
+| Progerie | LMNA | Die stumme Mutation c.1824C>T, die trotzdem tötet |
+| PCSK9 | PCSK9 | Einen gesunden Menschen „verbessern" – mit Ethikfrage |
+| Laktasepersistenz | MCM6 | Eine Base in nicht-kodierender DNA, 7 500 Jahre Evolution |
+| Freies Labor | Reportergen | Alles ausprobieren, ohne Folgen |
 
-Für echte 2-Wege-Sync (Slot-Belegung lesen + Termine schreiben):
-
-1. [Google Cloud Console](https://console.cloud.google.com) → Projekt anlegen
-2. **Google Calendar API** aktivieren
-3. **Service Account** anlegen → JSON-Key herunterladen
-4. Salon-Kalender öffnen → Einstellungen → den Service-Account als
-   "Termine ändern" hinzufügen
-5. `.env.local`:
-   ```
-   GOOGLE_CALENDAR_ID=primary
-   GOOGLE_SERVICE_ACCOUNT_JSON={"type":"service_account",...}
-   ```
-6. `npm install googleapis` und [lib/calendar.ts](lib/calendar.ts) ausfüllen
-   (Stub mit TODOs ist da). Nichts anderes muss angefasst werden.
-
-## Deploy auf Vercel
-
-1. Repo zu GitHub pushen
-2. <https://vercel.com/new> → Repo importieren
-3. Alle ENV-Variablen oben in den Project Settings hinterlegen
-4. Deploy
-
-## Projekt-Struktur
+## Aufbau
 
 ```
 app/
-  page.tsx                       Landingpage (Hero, About, Services, Galerie, Stimmen, Buchung, Gutschein, Kontakt)
-  layout.tsx                     Root layout, Fonts
-  gutschein/erfolg/page.tsx      Stripe Success Page
-  api/
-    availability/route.ts        GET freie Slots für Datum
-    booking/route.ts             POST Terminbuchung → 2 Mails + .ics
-    checkout/route.ts            POST → Stripe Checkout Session
-    stripe/webhook/route.ts      Stripe webhook receiver
-components/
-  BookingForm.tsx                4-Step-Wizard mit DayPicker + Slots
-  GiftCardForm.tsx               Betragspicker + Live-Vorschau
-lib/
-  booking.ts                     Öffnungszeiten, Slot-Generator, Service-Katalog
-  schema.ts                      Zod-Schemas (booking, giftCard, contact)
-  mail.ts                        Resend wrapper + HTML shell
-  ics.ts                         iCalendar Generator
-  voucher.ts                     Code-Generator + €-Formatter
-  stripe.ts                      Stripe client singleton
-  giftcard-mail.ts               Gutschein-Mail-Versand (idempotent)
-  calendar.ts                    Google Calendar Stub
-```
-
-## Base-Editing-Labor (`/biologie`)
-
-Eigenständige Biologie-App im selben Projekt: eine interaktive Lernumgebung zum
-gezielten Austausch eines einzelnen Basenpaares durch Base-Editing. Läuft als
-Vollbild-Anwendung unter `/biologie`, ausgelegt auf Bedienung per Touch (iPad).
-
-Die dreidimensionale Doppelhelix wird mit three.js gerendert (ein Finger drehen,
-zwei Finger zoomen bzw. an der Sequenz entlangfahren, tippen zum Auswählen).
-Neun Fälle reichen vom Heilen (Sichelzellanämie, β-Thalassämie, Mukoviszidose,
-Progerie) über das gezielte Auslösen einer Krankheit bis zum Verbessern eines
-gesunden Menschen (PCSK9, Laktasepersistenz) und einem freien Übungsmodus.
-
-```
-app/biologie/page.tsx            Route (Metadata, Viewport)
+  page.tsx                       Route
+  layout.tsx                     Fonts, Metadata, Viewport
 components/bio/
   BaseEditorLab.tsx              Zustand, Layout, Aktionen
   HelixCanvas.tsx                3D-Doppelhelix, Enzymkomplex, Replikation (three.js)
   SequenceTrack.tsx              Sequenzleiste mit Protein-Spur
+  ui.tsx                         Gemeinsame Bausteine
   panels/                        Fallakte, Werkzeugkasten, Befund, Protokoll, Wissen
 lib/bio/
   genetics.ts                    Genetischer Code, Komplementierung, Proteinvergleich
@@ -135,17 +83,29 @@ lib/bio/
   phenotype.ts                   Auswertung Genotyp → Krankheitsbild
   cases.ts                       Gene und Fälle
   lab.ts                         Zielprüfung, Guide-Bewertung
+  colors.ts                      Farbschema der vier Basen
 scripts/validate-bio.ts          Prüft Leseraster, Proteine und Erreichbarkeit der Zielstellen
 ```
 
-Datengrundlage prüfen:
+Die 3D-Ansicht ist direkt mit three.js gebaut, ohne Wrapper-Bibliothek. Alle
+Meshes werden einmal angelegt und danach nur noch bewegt und umgefärbt – beim
+Blättern durch die Sequenz entsteht keine Geometrie-Neuberechnung.
+
+## Prüfen
 
 ```bash
-npm run verify:bio
+npm run verify:bio   # Leseraster, β-Globin-Protein, erreichbare Zielstellen, Startzustände
+npm run lint
+npm run build
 ```
 
-Varianten, Positionen und Mechanismen sind real. Die Sequenzen sind Ausschnitte –
-beim HBB-Gen der echte Abschnitt (5'-UTR plus Codon 1–68), bei den übrigen Genen
-didaktisch vereinfachte Lehrsequenzen. Jedes Gen benennt seine Herkunft in der App.
+## Zur Datengrundlage
 
-# AgentsGilt
+Varianten, Positionen und Mechanismen sind real. Die Sequenzen sind Ausschnitte:
+beim HBB-Gen der echte Abschnitt (5'-UTR plus Codon 1–68, gegen das bekannte
+β-Globin-Protein verifiziert), bei den übrigen Genen didaktisch vereinfachte
+Lehrsequenzen, damit alle Zielstellen mit handhabbarer Sequenzlänge erreichbar
+bleiben. Jedes Gen weist seine Herkunft in der App aus.
+
+Die App ist ein Lernwerkzeug, keine medizinische oder wissenschaftliche
+Fachanwendung.

@@ -147,7 +147,7 @@ function LabWorkspace({ caseId, settings, onSettingsChange, onOpenCases }: Works
   const [prime, setPrime] = useState<PrimeOperationState>({
     type: "substitute",
     base: "A",
-    insert: "TTT",
+    insert: "CTT",
     deleteLength: 3,
   });
   const [log, setLog] = useState<LogEntry[]>([]);

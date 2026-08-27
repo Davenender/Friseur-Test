@@ -758,7 +758,7 @@ export const CASES: readonly LabCase[] = [
     hints: [
       "Base-Editoren tauschen Basen aus. Sie fügen keine ein und entfernen keine.",
       "Zähle nach: Lenas Sequenz ist drei Basen kürzer als die Referenz. Kein Basenaustausch der Welt ändert daran etwas.",
-      "Der Prime-Editor bringt seine eigene Vorlage mit. Wähle ihn, markiere die Lücke und füge TTT wieder ein.",
+      "Der Prime-Editor bringt seine eigene Vorlage mit. Wähle ihn, tippe die Lücke an und füge die fehlenden drei Basen CTT wieder ein.",
     ],
     difficulty: 3,
     tags: ["Grenzen der Methode", "Prime-Editing"],

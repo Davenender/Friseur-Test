@@ -1,5 +1,5 @@
 {
-  "name": "haarstudio-init",
+  "name": "base-editing-lab",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,27 +10,17 @@
     "verify:bio": "tsx scripts/validate-bio.ts"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.104.0",
-    "@hcaptcha/react-hcaptcha": "^2.0.2",
-    "@hookform/resolvers": "^5.4.0",
-    "@types/three": "^0.185.4",
-    "date-fns": "^4.4.0",
-    "googleapis": "^173.0.0",
     "next": "16.2.7",
     "react": "19.2.4",
-    "react-day-picker": "^10.0.1",
     "react-dom": "19.2.4",
-    "react-hook-form": "^7.78.0",
-    "resend": "^6.12.4",
-    "stripe": "^22.2.0",
-    "three": "^0.185.1",
-    "zod": "^4.4.3"
+    "three": "^0.185.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/three": "^0.185.4",
     "eslint": "^9",
     "eslint-config-next": "16.2.7",
     "tailwindcss": "^4",

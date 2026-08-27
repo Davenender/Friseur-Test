@@ -1,28 +1,38 @@
-import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import { ChatWidget } from "@/components/ChatWidget";
 
 const inter = Inter({
   variable: "--font-body",
   subsets: ["latin"],
 });
 
-const playfair = Playfair_Display({
-  variable: "--font-head",
+/** Für Basensequenzen und Codons: gleiche Zeichenbreite hält die Spalten sauber. */
+const mono = JetBrains_Mono({
+  variable: "--font-code",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Haarstudio Graziella – Ihr Friseur in Mühlheim am Main",
+  title: "Base-Editing-Labor",
   description:
-    "Haarstudio Graziella in Mühlheim am Main / Lämmerspiel. Schnitt, Coloration, Strähnen, Keratinglättung. Jetzt online Termin anfragen.",
+    "Interaktive Biologie-App zum Base-Editing: An einer dreidimensionalen DNA-Doppelhelix ein einzelnes Basenpaar gezielt austauschen – Krankheiten heilen, auslösen und die Grenzen der Methode verstehen.",
+  applicationName: "Base-Editing-Labor",
   openGraph: {
-    title: "Haarstudio Graziella",
-    description: "Ihr Friseur in Mühlheim am Main – wo Haarträume wahr werden.",
+    title: "Base-Editing-Labor",
+    description:
+      "Punktmutationen gezielt setzen: 3D-Doppelhelix, Base- und Prime-Editoren, neun Fälle vom Heilen bis zum Verbessern.",
     locale: "de_DE",
     type: "website",
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#020617",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
@@ -31,14 +41,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="de"
-      className={`${inter.variable} ${playfair.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col bg-cream text-ink">
-        {children}
-        <ChatWidget />
-      </body>
+    <html lang="de" className={`${inter.variable} ${mono.variable} h-full antialiased`}>
+      <body className="min-h-full bg-slate-950 text-slate-100">{children}</body>
     </html>
   );
 }
