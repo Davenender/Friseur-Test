@@ -109,4 +109,43 @@ lib/
   giftcard-mail.ts               Gutschein-Mail-Versand (idempotent)
   calendar.ts                    Google Calendar Stub
 ```
+
+## Base-Editing-Labor (`/biologie`)
+
+Eigenständige Biologie-App im selben Projekt: eine interaktive Lernumgebung zum
+gezielten Austausch eines einzelnen Basenpaares durch Base-Editing. Läuft als
+Vollbild-Anwendung unter `/biologie`, ausgelegt auf Bedienung per Touch (iPad).
+
+Die dreidimensionale Doppelhelix wird mit three.js gerendert (ein Finger drehen,
+zwei Finger zoomen bzw. an der Sequenz entlangfahren, tippen zum Auswählen).
+Neun Fälle reichen vom Heilen (Sichelzellanämie, β-Thalassämie, Mukoviszidose,
+Progerie) über das gezielte Auslösen einer Krankheit bis zum Verbessern eines
+gesunden Menschen (PCSK9, Laktasepersistenz) und einem freien Übungsmodus.
+
+```
+app/biologie/page.tsx            Route (Metadata, Viewport)
+components/bio/
+  BaseEditorLab.tsx              Zustand, Layout, Aktionen
+  HelixCanvas.tsx                3D-Doppelhelix, Enzymkomplex, Replikation (three.js)
+  SequenceTrack.tsx              Sequenzleiste mit Protein-Spur
+  panels/                        Fallakte, Werkzeugkasten, Befund, Protokoll, Wissen
+lib/bio/
+  genetics.ts                    Genetischer Code, Komplementierung, Proteinvergleich
+  editors.ts                     Base-/Prime-Editoren, PAM-Varianten, Guide-Suche, Effizienzen
+  phenotype.ts                   Auswertung Genotyp → Krankheitsbild
+  cases.ts                       Gene und Fälle
+  lab.ts                         Zielprüfung, Guide-Bewertung
+scripts/validate-bio.ts          Prüft Leseraster, Proteine und Erreichbarkeit der Zielstellen
+```
+
+Datengrundlage prüfen:
+
+```bash
+npm run verify:bio
+```
+
+Varianten, Positionen und Mechanismen sind real. Die Sequenzen sind Ausschnitte –
+beim HBB-Gen der echte Abschnitt (5'-UTR plus Codon 1–68), bei den übrigen Genen
+didaktisch vereinfachte Lehrsequenzen. Jedes Gen benennt seine Herkunft in der App.
+
 # AgentsGilt

@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 interface Message {
@@ -14,6 +15,7 @@ const ATTENTION_DELAY_MS = 10_000;
 const LEAD_MARKER = "[LEAD_REQUEST]";
 
 export function ChatWidget() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [bubbleVisible, setBubbleVisible] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
@@ -187,6 +189,9 @@ export function ChatWidget() {
       sendMessage();
     }
   }
+
+  // Die Biologie-App belegt den ganzen Bildschirm – der Salon-Chat hat dort nichts zu suchen.
+  if (pathname?.startsWith("/biologie")) return null;
 
   return (
     <>
