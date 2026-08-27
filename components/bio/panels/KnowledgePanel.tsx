@@ -2,9 +2,11 @@
 
 /** Der Wissensteil: Mechanismus, Grenzen, Vererbung des Edits, Recht und Ethik. */
 
-import type { ReactNode } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { type Base } from "@/lib/bio/genetics";
 import { BASE_COLORS } from "@/lib/bio/colors";
+import { GLOSSARY, PAIRING_RULE, PART_INFO, QUESTIONS, searchGlossary } from "@/lib/bio/explain";
+import { BaseProfile } from "../PartCard";
 
 function Section({ title, children, open = false }: { title: string; children: ReactNode; open?: boolean }) {
   return (
@@ -42,7 +44,186 @@ const TOOL_MATRIX: Record<string, { tool: string; strand: string; color: string 
   "G>T": null,
 };
 
+type Section = "basen" | "erklaert" | "glossar" | "selbsttest";
+
+const SECTIONS: { id: Section; label: string }[] = [
+  { id: "basen", label: "Basen" },
+  { id: "erklaert", label: "Erklärt" },
+  { id: "glossar", label: "Glossar" },
+  { id: "selbsttest", label: "Selbsttest" },
+];
+
 export function KnowledgePanel() {
+  const [section, setSection] = useState<Section>("basen");
+
+  return (
+    <div className="space-y-3">
+      <div className="flex gap-1 rounded-xl border border-slate-800 bg-slate-900/60 p-1">
+        {SECTIONS.map((entry) => (
+          <button
+            key={entry.id}
+            type="button"
+            onClick={() => setSection(entry.id)}
+            style={{ touchAction: "manipulation" }}
+            className={`min-h-9 flex-1 rounded-lg text-[11px] font-semibold transition-colors ${
+              section === entry.id ? "bg-slate-700 text-white" : "text-slate-400"
+            }`}
+          >
+            {entry.label}
+          </button>
+        ))}
+      </div>
+
+      {section === "basen" && <BasesSection />}
+      {section === "glossar" && <GlossarySection />}
+      {section === "selbsttest" && <QuizSection />}
+      {section === "erklaert" && <Explained />}
+    </div>
+  );
+}
+
+function BasesSection() {
+  return (
+    <div className="space-y-3">
+      <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
+        <h3 className="text-sm font-semibold text-slate-100">Was die Buchstaben bedeuten</h3>
+        <p className="mt-1.5 text-[12px] leading-relaxed text-slate-300">
+          A, T, G und C sind Abkürzungen für vier Moleküle. Nur ihre Reihenfolge unterscheidet ein
+          Gen vom nächsten – Zucker und Phosphat sind überall gleich.
+        </p>
+        <p className="mt-2 rounded-lg border border-cyan-500/30 bg-cyan-500/10 p-2.5 text-[11px] leading-relaxed text-cyan-100">
+          {PAIRING_RULE}
+        </p>
+      </div>
+
+      <div className="space-y-2">
+        {(["A", "T", "G", "C"] as Base[]).map((base) => (
+          <BaseProfile key={base} base={base} />
+        ))}
+      </div>
+
+      <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
+        <h3 className="text-sm font-semibold text-slate-100">Die drei Bauteile eines Nukleotids</h3>
+        <p className="mt-1.5 text-[12px] leading-relaxed text-slate-400">
+          Jeder Baustein der DNA besteht aus denselben drei Teilen. Tippe sie in der 3D-Ansicht an,
+          dann erscheint die Erklärung direkt am Modell.
+        </p>
+        <ul className="mt-3 space-y-2">
+          {(["phosphat", "zucker", "base"] as const).map((kind) => {
+            const info = PART_INFO[kind];
+            return (
+              <li
+                key={kind}
+                className="rounded-lg border-l-2 bg-slate-950/60 p-2.5"
+                style={{ borderColor: info.color }}
+              >
+                <p className="text-[12px] font-semibold text-slate-100">
+                  {info.title} <span className="font-normal text-slate-500">· {info.short}</span>
+                </p>
+                <p className="mt-1 text-[11px] leading-relaxed text-slate-400">{info.job}</p>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+function GlossarySection() {
+  const [query, setQuery] = useState("");
+  const results = useMemo(() => searchGlossary(query), [query]);
+  const groups = useMemo(() => {
+    const map = new Map<string, typeof GLOSSARY>();
+    for (const entry of results) {
+      map.set(entry.group, [...(map.get(entry.group) ?? []), entry] as typeof GLOSSARY);
+    }
+    return [...map.entries()];
+  }, [results]);
+
+  return (
+    <div className="space-y-3">
+      <input
+        type="search"
+        value={query}
+        onChange={(event) => setQuery(event.target.value)}
+        placeholder="Begriff suchen …"
+        aria-label="Glossar durchsuchen"
+        className="min-h-11 w-full rounded-xl border border-slate-700 bg-slate-950 px-3 text-sm text-slate-100 outline-none placeholder:text-slate-600 focus:border-cyan-400"
+      />
+      {results.length === 0 && (
+        <p className="rounded-xl border border-slate-800 bg-slate-900/60 p-4 text-[12px] text-slate-500">
+          Kein Eintrag gefunden. Versuch es mit einem kürzeren Suchwort.
+        </p>
+      )}
+      {groups.map(([group, entries]) => (
+        <div key={group}>
+          <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+            {group}
+          </p>
+          <div className="space-y-1.5">
+            {entries.map((entry) => (
+              <details
+                key={entry.term}
+                className="group rounded-xl border border-slate-800 bg-slate-900/60"
+              >
+                <summary
+                  className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 px-3 marker:hidden"
+                  style={{ touchAction: "manipulation" }}
+                >
+                  <span>
+                    <span className="block text-[12px] font-semibold text-slate-100">{entry.term}</span>
+                    <span className="block text-[10px] text-slate-500">{entry.short}</span>
+                  </span>
+                  <span className="text-slate-600 transition-transform group-open:rotate-180">⌄</span>
+                </summary>
+                <p className="px-3 pb-3 text-[11px] leading-relaxed text-slate-400">{entry.long}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function QuizSection() {
+  const [revealed, setRevealed] = useState<Set<number>>(new Set());
+  return (
+    <div className="space-y-2">
+      <p className="rounded-xl border border-slate-800 bg-slate-900/60 p-4 text-[12px] leading-relaxed text-slate-400">
+        Erst selbst antworten, dann aufdecken. Die Fragen zielen genau auf das, was man beim
+        Ausprobieren leicht übersieht.
+      </p>
+      {QUESTIONS.map((entry, index) => {
+        const open = revealed.has(index);
+        return (
+          <div key={entry.question} className="rounded-xl border border-slate-800 bg-slate-900/60 p-3">
+            <p className="text-[12px] font-medium leading-relaxed text-slate-100">
+              {index + 1}. {entry.question}
+            </p>
+            {open ? (
+              <p className="mt-2 rounded-lg border-l-2 border-emerald-500 bg-emerald-500/10 p-2.5 text-[11px] leading-relaxed text-emerald-100">
+                {entry.answer}
+              </p>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setRevealed((current) => new Set(current).add(index))}
+                style={{ touchAction: "manipulation" }}
+                className="mt-2 min-h-9 rounded-lg border border-slate-700 px-3 text-[11px] font-semibold text-slate-300"
+              >
+                Antwort zeigen
+              </button>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function Explained() {
   return (
     <div className="space-y-3">
       <Section title="Was Base-Editing überhaupt macht" open>

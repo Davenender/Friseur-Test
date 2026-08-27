@@ -40,6 +40,9 @@ import {
 } from "@/lib/bio/phenotype";
 import { checkGoal, hasGoal, rankGuides, type LogEntry, type RankedGuide } from "@/lib/bio/lab";
 import { SequenceTrack } from "./SequenceTrack";
+import { ViewMenu } from "./ViewMenu";
+import { BaseInfoPopover, PartCard } from "./PartCard";
+import type { HelixDetail, PartHit } from "./HelixCanvas";
 import { ActionButton, SeverityBadge } from "./ui";
 import { ToolPanel, type PrimeOperationState } from "./panels/ToolPanel";
 import { PatientPanel } from "./panels/PatientPanel";
@@ -66,8 +69,6 @@ const TABS: { id: Tab; label: string }[] = [
   { id: "protokoll", label: "Protokoll" },
   { id: "wissen", label: "Wissen" },
 ];
-
-const SPAN_OPTIONS = [13, 21, 31];
 
 function initialFocus(labCase: LabCase, gene: GeneDef, sequence: string): number {
   if (labCase.focusIndex !== undefined) return labCase.focusIndex;
@@ -96,6 +97,8 @@ export function BaseEditorLab() {
     pamId: "NGG",
     realistic: true,
     showLabels: true,
+    showParts: false,
+    detail: "molekuel",
     span: 21,
     tab: "fall",
   });
@@ -121,6 +124,9 @@ interface LabSettings {
   pamId: PamId;
   realistic: boolean;
   showLabels: boolean;
+  /** Beschriftet die Bauteile direkt im 3D-Bild. */
+  showParts: boolean;
+  detail: HelixDetail;
   span: number;
   tab: Tab;
 }
@@ -133,7 +139,7 @@ interface WorkspaceProps {
 }
 
 function LabWorkspace({ caseId, settings, onSettingsChange, onOpenCases }: WorkspaceProps) {
-  const { editorId, pamId, realistic, showLabels, span, tab } = settings;
+  const { editorId, pamId, realistic, showLabels, showParts, detail, span, tab } = settings;
   const labCase = useMemo(() => getCase(caseId), [caseId]);
   const gene = useMemo(() => getGene(labCase.geneId), [labCase]);
   const reference = useMemo(() => referenceSequence(gene), [gene]);
@@ -152,6 +158,9 @@ function LabWorkspace({ caseId, settings, onSettingsChange, onOpenCases }: Works
   });
   const [log, setLog] = useState<LogEntry[]>([]);
   const [replicating, setReplicating] = useState(false);
+  const [viewMenuOpen, setViewMenuOpen] = useState(false);
+  const [partHit, setPartHit] = useState<PartHit | null>(null);
+  const [legendBase, setLegendBase] = useState<Base | null>(null);
   const [busy, setBusy] = useState(false);
   const [flash, setFlash] = useState<{ token: number; indices: number[] }>({ token: 0, indices: [] });
   const [showHint, setShowHint] = useState(true);
@@ -276,6 +285,11 @@ function LabWorkspace({ caseId, settings, onSettingsChange, onOpenCases }: Works
     setSelected(index);
     setCenter(index);
     setGuideId(null);
+  }, []);
+
+  const handlePart = useCallback((hit: PartHit) => {
+    setPartHit(hit);
+    setLegendBase(null);
   }, []);
 
   const describeOutcome = useCallback(
@@ -480,10 +494,13 @@ function LabWorkspace({ caseId, settings, onSettingsChange, onOpenCases }: Works
               editorColor={editor.color}
               enzymeBound={enzymeBound}
               mode={replicating ? "replication" : "helix"}
+              detail={detail}
               showLabels={showLabels}
+              showParts={showParts}
               flashToken={flash.token}
               flashIndices={flash.indices}
               onSelect={handleSelect}
+              onPart={handlePart}
               onCenterChange={(next) =>
                 setCenter(Math.max(0, Math.min(sequence.length - 1, next)))
               }
@@ -514,55 +531,45 @@ function LabWorkspace({ caseId, settings, onSettingsChange, onOpenCases }: Works
             )}
 
             {/* Ansichtssteuerung */}
-            <div className="absolute right-3 top-3 flex flex-col items-end gap-2">
-              <div className="flex overflow-hidden rounded-xl border border-slate-700/70 bg-slate-950/80 backdrop-blur">
-                {SPAN_OPTIONS.map((option) => (
-                  <button
-                    key={option}
-                    type="button"
-                    onClick={() => onSettingsChange({ span: option })}
-                    style={{ touchAction: "manipulation" }}
-                    className={`min-h-10 px-3 text-[11px] font-semibold ${
-                      span === option ? "bg-slate-700 text-white" : "text-slate-400"
-                    }`}
-                  >
-                    {option} bp
-                  </button>
-                ))}
-              </div>
-              <button
-                type="button"
-                onClick={() => onSettingsChange({ showLabels: !showLabels })}
-                style={{ touchAction: "manipulation" }}
-                className="min-h-10 rounded-xl border border-slate-700/70 bg-slate-950/80 px-3 text-[11px] font-semibold text-slate-300 backdrop-blur"
-              >
-                {showLabels ? "Buchstaben aus" : "Buchstaben an"}
-              </button>
-              <button
-                type="button"
-                onClick={toggleReplication}
-                style={{ touchAction: "manipulation" }}
-                className={`min-h-10 rounded-xl border px-3 text-[11px] font-semibold backdrop-blur ${
-                  replicating
-                    ? "border-cyan-400 bg-cyan-500/20 text-cyan-200"
-                    : "border-slate-700/70 bg-slate-950/80 text-slate-300"
-                }`}
-              >
-                {replicating ? "Zellteilung läuft" : "Zellteilung"}
-              </button>
+            <div className="absolute right-3 top-3">
+              <ViewMenu
+                open={viewMenuOpen}
+                onOpenChange={setViewMenuOpen}
+                detail={detail}
+                onDetailChange={(next) => onSettingsChange({ detail: next })}
+                span={span}
+                onSpanChange={(next) => onSettingsChange({ span: next })}
+                showLabels={showLabels}
+                onShowLabelsChange={(value) => onSettingsChange({ showLabels: value })}
+                showParts={showParts}
+                onShowPartsChange={(value) => onSettingsChange({ showParts: value })}
+                replicating={replicating}
+                onReplicatingChange={toggleReplication}
+              />
             </div>
 
             {/* Legende */}
-            <div className="pointer-events-none absolute bottom-3 left-3 flex flex-wrap gap-2 rounded-xl border border-slate-800/70 bg-slate-950/70 px-2.5 py-1.5 backdrop-blur">
+            <div className="absolute bottom-3 left-3 flex flex-wrap items-center gap-1.5 rounded-xl border border-slate-800/70 bg-slate-950/75 px-2 py-1.5 backdrop-blur">
               {(["A", "T", "G", "C"] as Base[]).map((base) => (
-                <span key={base} className="flex items-center gap-1 text-[10px] text-slate-400">
-                  <span className="h-2 w-2 rounded-full" style={{ backgroundColor: BASE_COLORS[base] }} />
+                <button
+                  key={base}
+                  type="button"
+                  onClick={() => {
+                    setLegendBase(base);
+                    setPartHit(null);
+                  }}
+                  aria-label={`Was bedeutet ${base}?`}
+                  style={{ touchAction: "manipulation" }}
+                  className="flex min-h-8 items-center gap-1.5 rounded-lg px-1.5 text-[11px] font-semibold text-slate-300 hover:bg-slate-800"
+                >
+                  <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: BASE_COLORS[base] }} />
                   {base}
-                </span>
+                </button>
               ))}
+              <span className="ml-0.5 text-[9px] text-slate-600">antippen</span>
               {activeGuide && (
                 <>
-                  <span className="flex items-center gap-1 text-[10px] text-slate-400">
+                  <span className="ml-1 flex items-center gap-1 text-[10px] text-slate-400">
                     <span className="h-2 w-2 rounded-full bg-orange-400" /> Protospacer
                   </span>
                   <span className="flex items-center gap-1 text-[10px] text-slate-400">
@@ -580,6 +587,16 @@ function LabWorkspace({ caseId, settings, onSettingsChange, onOpenCases }: Works
               </div>
             )}
 
+            {(partHit || legendBase) && (
+              <div className="pointer-events-none absolute left-3 top-28 w-[min(21rem,calc(100%-1.5rem))]">
+                {partHit ? (
+                  <PartCard hit={partHit} sequence={sequence} onClose={() => setPartHit(null)} />
+                ) : legendBase ? (
+                  <BaseInfoPopover base={legendBase} onClose={() => setLegendBase(null)} />
+                ) : null}
+              </div>
+            )}
+
             {showHint && (
               <div className="absolute inset-x-3 bottom-14 mx-auto max-w-md rounded-2xl border border-slate-700 bg-slate-900/95 p-4 shadow-2xl backdrop-blur sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2">
                 <p className="text-xs font-semibold text-slate-100">So bedienst du die Helix</p>
@@ -588,6 +605,8 @@ function LabWorkspace({ caseId, settings, onSettingsChange, onOpenCases }: Works
                   <li>· Zwei Finger zusammen/auseinander: zoomen</li>
                   <li>· Zwei Finger hoch/runter: an der Sequenz entlangfahren</li>
                   <li>· Auf ein Basenpaar tippen: als Ziel auswählen</li>
+                  <li>· Auf Phosphat, Zucker oder Base tippen: Erklärung dazu</li>
+                  <li>· Über &bdquo;Ansicht&ldquo; die Darstellung von Schema bis Atommodell umstellen</li>
                 </ul>
                 <ActionButton onClick={() => setShowHint(false)} className="mt-3 w-full !min-h-10 !text-xs">
                   Verstanden

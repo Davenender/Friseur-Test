@@ -20,15 +20,34 @@ npm run dev        # http://localhost:3000
 | Zwei Finger zusammen/auseinander | Zoomen |
 | Zwei Finger hoch/runter | An der Sequenz entlangfahren |
 | Auf ein Basenpaar tippen | Als Ziel auswählen |
+| Auf Phosphat, Zucker, Base tippen | Erklärung zum Bauteil |
 
 ## Was die App kann
 
-**3D-Doppelhelix** mit Zucker-Phosphat-Rückgrat, Basenpaaren in korrekter
-Größenrelation (Purin/Pyrimidin) und Wasserstoffbrücken. Der Cas9-Komplex mit
-Desaminase und Guide-RNA fährt an die Zielstelle und klappt die Helix lokal auf
-(R-Schleife). Die Schaltfläche „Zellteilung" zeigt die semikonservative
+**3D-Doppelhelix** in drei umschaltbaren Detailstufen:
+
+| Stufe | Was man sieht |
+| --- | --- |
+| Schema | Stäbe und Kugeln – am übersichtlichsten |
+| Moleküle | Echte Ringformen: Zucker als Fünfeck, Purine als Doppelring, Pyrimidine als Einzelring, gestrichelte Wasserstoffbrücken |
+| Atome | Jedes Atom einzeln in CPK-Farben, wie in einem Molekülviewer |
+
+Das Modell ist nicht gemalt, sondern aus echten Maßen konstruiert: Ringbindungen
+von 1,39 Å, Wasserstoffbrücken von 2,9 Å, glykosidische Bindung von 1,47 Å. Aus
+der so entstehenden Breite des Basenpaars (10,7 Å zwischen den C1'-Atomen) folgt
+der Winkelversatz der beiden Stränge von 132° – und damit von selbst die ungleich
+breite große und kleine Furche. `scripts/inspect-molecule.ts` und
+`scripts/inspect-backbone.ts` rechnen das nach.
+
+Der Cas9-Komplex mit Desaminase und Guide-RNA fährt an die Zielstelle und klappt
+die Helix lokal auf (R-Schleife). „Zellteilung" zeigt die semikonservative
 Replikation: Die Helix trennt sich in zwei Tochterhelices aus je einem alten und
 einem neu wachsenden Strang – so wird der Edit vererbt.
+
+**Zum Verstehen** ist alles antippbar: Phosphat, Zucker und Base erklären sich im
+3D-Bild selbst, die Farblegende erklärt die Buchstaben. „Was ist was?" beschriftet
+die Bauteile direkt am Modell, inklusive der beiden Furchen. Der Wissensteil hat
+Steckbriefe der vier Basen, ein durchsuchbares Glossar und einen Selbsttest.
 
 **Werkzeuge** mit ihren echten Beschränkungen:
 
